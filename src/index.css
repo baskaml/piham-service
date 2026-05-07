@@ -1,0 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PIHAM INFO SERVICES — Premium dark with Airbnb Rausch accent
+   Default = dark cinematic. Add `.light` on <html> for light mode. */
+
+@layer base {
+  :root {
+    /* === DARK — Cinematic graphite with warm undertone === */
+    /* Layered neutrals: not flat black, deep warm graphite */
+    --background: 24 8% 5%;              /* #0D0C0B — warm near-black */
+    --background-elevated: 28 7% 9%;     /* #18170F → warm graphite */
+    --background-sunken: 24 10% 3%;      /* deeper layer for ambient depth */
+    --foreground: 36 25% 96%;            /* warm pearl, not pure white */
+
+    /* Surfaces — tinted, layered */
+    --card: 28 8% 10%;
+    --card-foreground: 36 22% 95%;
+    --card-elevated: 30 9% 13%;          /* second tier surface */
+
+    --popover: 26 9% 8%;
+    --popover-foreground: 36 22% 96%;
+
+    /* Primary — soft warm pearl on dark */
+    --primary: 38 28% 96%;
+    --primary-foreground: 26 12% 8%;
+    --primary-glow: 14 95% 70%;
+
+    /* Accent — Rausch coral, slightly warmed */
+    --accent: 8 92% 60%;
+    --accent-foreground: 36 30% 98%;
+    --accent-glow: 14 100% 70%;
+
+    /* Or — burnished gold, less saturated, more luxurious */
+    --gold: 36 75% 62%;
+    --gold-foreground: 26 12% 8%;
+
+    /* Secondary — smoky warm graphite */
+    --secondary: 28 6% 14%;
+    --secondary-foreground: 36 18% 92%;
+
+    --muted: 28 6% 13%;
+    --muted-foreground: 32 10% 68%;      /* warm stone */
+
+    --destructive: 4 70% 55%;
+    --destructive-foreground: 36 30% 98%;
+
+    --border: 30 7% 18%;                 /* warm graphite border */
+    --input: 28 7% 15%;
+    --ring: 8 92% 60%;
+
+    --radius: 1rem;
+
+    /* === Gradients — atmospheric, layered === */
+    --gradient-primary: linear-gradient(135deg, hsl(8 92% 60%), hsl(340 75% 55%));
+    --gradient-accent: linear-gradient(135deg, hsl(8 92% 62%), hsl(340 80% 58%) 50%, hsl(36 75% 62%));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--gold)), hsl(40 85% 75%));
+    --gradient-hero-overlay: linear-gradient(180deg, hsl(24 12% 4% / 0.30), hsl(24 14% 3% / 0.92));
+    --gradient-mesh:
+      radial-gradient(at 18% 20%, hsl(8 92% 60% / 0.32) 0px, transparent 55%),
+      radial-gradient(at 82% 12%, hsl(340 75% 55% / 0.22) 0px, transparent 55%),
+      radial-gradient(at 50% 92%, hsl(36 75% 60% / 0.18) 0px, transparent 55%);
+    --gradient-surface: linear-gradient(180deg, hsl(28 9% 11%), hsl(26 8% 8%));
+    --gradient-surface-elevated: linear-gradient(180deg, hsl(30 9% 14%), hsl(28 8% 10%));
+    --gradient-ambient: radial-gradient(ellipse at top, hsl(28 14% 12% / 0.8), transparent 70%);
+
+    /* === Shadows — dense, layered, cinematic === */
+    --shadow-soft: 0 1px 2px hsl(24 20% 0% / 0.4), 0 4px 16px hsl(24 20% 0% / 0.5);
+    --shadow-card:
+      0 1px 2px hsl(24 20% 0% / 0.5),
+      0 8px 24px hsl(24 20% 0% / 0.55),
+      0 24px 48px hsl(24 20% 0% / 0.4);
+    --shadow-hover:
+      0 2px 4px hsl(24 20% 0% / 0.5),
+      0 24px 48px hsl(8 92% 40% / 0.22),
+      0 40px 80px hsl(24 20% 0% / 0.6);
+    --shadow-elevated:
+      0 8px 16px hsl(24 20% 0% / 0.5),
+      0 32px 80px hsl(24 20% 0% / 0.7),
+      0 0 80px hsl(8 92% 50% / 0.10);
+    --shadow-nav: 0 1px 0 hsl(36 30% 100% / 0.04), 0 12px 40px hsl(24 20% 0% / 0.55);
+    --shadow-glow-accent: 0 0 60px hsl(var(--accent) / 0.45);
+    --shadow-inner-warm: inset 0 1px 0 hsl(36 30% 100% / 0.05);
+
+    /* Glass — warm tinted, premium */
+    --glass-bg: hsl(28 10% 9% / 0.55);
+    --glass-bg-strong: hsl(28 10% 9% / 0.85);
+    --glass-border: hsl(36 30% 100% / 0.07);
+    --glass-highlight: hsl(36 40% 100% / 0.12);
+    --nav-bg-hsl: 24 9% 5%;
+
+    /* Motion */
+    --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 24 9% 5%;
+    --sidebar-foreground: 36 22% 96%;
+    --sidebar-primary: 8 92% 60%;
+    --sidebar-primary-foreground: 36 30% 98%;
+    --sidebar-accent: 28 7% 13%;
+    --sidebar-accent-foreground: 36 22% 96%;
+    --sidebar-border: 30 7% 18%;
+    --sidebar-ring: 8 92% 60%;
+  }
+
+  /* === LIGHT — Pearl ivory canvas, warm stone neutrals === */
+  .light {
+    --background: 36 30% 98%;            /* warm pearl, not pure white */
+    --background-elevated: 34 24% 96%;   /* soft ivory */
+    --background-sunken: 32 18% 93%;     /* tinted stone */
+    --foreground: 26 14% 12%;            /* soft contrast black, not pure */
+
+    --card: 36 35% 99%;
+    --card-foreground: 26 14% 12%;
+    --card-elevated: 34 28% 97%;
+
+    --popover: 36 35% 99%;
+    --popover-foreground: 26 14% 12%;
+
+    --primary: 26 14% 12%;
+    --primary-foreground: 36 30% 98%;
+    --primary-glow: 14 95% 68%;
+
+    --accent: 8 92% 58%;
+    --accent-foreground: 36 30% 98%;
+    --accent-glow: 14 100% 68%;
+
+    --gold: 36 70% 52%;
+    --gold-foreground: 26 14% 12%;
+
+    --secondary: 34 16% 94%;
+    --secondary-foreground: 26 14% 14%;
+
+    --muted: 32 14% 93%;
+    --muted-foreground: 28 8% 38%;       /* warm stone */
+
+    --border: 30 12% 87%;                /* warm stone border */
+    --input: 30 12% 88%;
+    --ring: 8 92% 58%;
+
+    --gradient-hero-overlay: linear-gradient(180deg, hsl(24 14% 0% / 0.10), hsl(24 14% 0% / 0.55));
+    --gradient-mesh:
+      radial-gradient(at 18% 20%, hsl(8 92% 58% / 0.16) 0px, transparent 55%),
+      radial-gradient(at 82% 12%, hsl(340 75% 55% / 0.12) 0px, transparent 55%),
+      radial-gradient(at 50% 92%, hsl(36 75% 60% / 0.12) 0px, transparent 55%);
+    --gradient-surface: linear-gradient(180deg, hsl(36 35% 99%), hsl(34 24% 96%));
+    --gradient-surface-elevated: linear-gradient(180deg, hsl(36 40% 100%), hsl(34 28% 97%));
+    --gradient-ambient: radial-gradient(ellipse at top, hsl(34 30% 95% / 0.9), transparent 70%);
+
+    --shadow-soft:
+      0 1px 2px hsl(26 30% 10% / 0.05),
+      0 4px 12px hsl(26 30% 10% / 0.06);
+    --shadow-card:
+      0 1px 2px hsl(26 30% 10% / 0.06),
+      0 8px 24px hsl(26 30% 10% / 0.08),
+      0 24px 48px hsl(26 30% 10% / 0.06);
+    --shadow-hover:
+      0 2px 4px hsl(26 30% 10% / 0.06),
+      0 16px 40px hsl(8 92% 50% / 0.16),
+      0 32px 64px hsl(26 30% 10% / 0.10);
+    --shadow-elevated:
+      0 8px 16px hsl(26 30% 10% / 0.08),
+      0 32px 80px hsl(26 30% 10% / 0.14);
+    --shadow-nav: 0 1px 0 hsl(30 12% 87% / 1), 0 8px 24px hsl(26 30% 10% / 0.06);
+    --shadow-inner-warm: inset 0 1px 0 hsl(36 40% 100% / 0.6);
+
+    --glass-bg: hsl(36 35% 99% / 0.72);
+    --glass-bg-strong: hsl(36 35% 99% / 0.92);
+    --glass-border: hsl(26 30% 10% / 0.06);
+    --glass-highlight: hsl(36 40% 100% / 0.6);
+    --nav-bg-hsl: 36 35% 99%;
+
+    --sidebar-background: 36 35% 99%;
+    --sidebar-foreground: 26 14% 12%;
+    --sidebar-accent: 34 16% 94%;
+    --sidebar-accent-foreground: 26 14% 12%;
+    --sidebar-border: 30 12% 87%;
+  }
+
+  html { color-scheme: dark; }
+  html.light { color-scheme: light; }
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  html { scroll-behavior: smooth; }
+
+  /* Smooth premium fade between light/dark themes */
+  html, body, html *:not(svg):not(path) {
+    transition:
+      background-color 500ms var(--ease-luxury),
+      border-color 500ms var(--ease-luxury),
+      color 400ms var(--ease-luxury),
+      box-shadow 500ms var(--ease-luxury),
+      fill 400ms var(--ease-luxury),
+      stroke 400ms var(--ease-luxury);
+  }
+  /* Disable theme transitions for elements that animate transforms/opacity heavily */
+  .no-theme-transition, .no-theme-transition * {
+    transition: none !important;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+    background-image: var(--gradient-ambient);
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  /* === Ambient cinematic backdrop ===
+     Layered radial light diffusion + soft vignette + atmospheric grain.
+     Reacts to mouse via --mx / --my (set by AmbientBackdrop). */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -8%;
+    z-index: -2;
+    pointer-events: none;
+    /* Default = dark cinematic (project default theme is dark) */
+    background:
+      radial-gradient(circle at calc(20% + var(--mx, 0px)) calc(20% + var(--my, 0px)),
+        rgba(255, 255, 255, 0.05), transparent 28%),
+      radial-gradient(circle at calc(80% + var(--mx, 0px) * -1) calc(30% + var(--my, 0px)),
+        rgba(255, 140, 90, 0.06), transparent 32%),
+      radial-gradient(circle at 50% 85%,
+        rgba(120, 110, 100, 0.05), transparent 45%),
+      linear-gradient(180deg, #111111 0%, #1A1A1A 100%);
+    filter: blur(20px);
+    transform: scale(1.1) translate3d(var(--mx, 0px), var(--my, 0px), 0);
+    transition: transform 1.4s var(--ease-luxury);
+    will-change: transform;
+  }
+
+  /* Light pearl version */
+  html.light body::before {
+    background:
+      radial-gradient(circle at calc(20% + var(--mx, 0px)) calc(20% + var(--my, 0px)),
+        rgba(255, 255, 255, 0.5), transparent 35%),
+      radial-gradient(circle at calc(80% + var(--mx, 0px) * -1) calc(30% + var(--my, 0px)),
+        rgba(198, 145, 104, 0.10), transparent 30%),
+      radial-gradient(circle at 50% 80%,
+        rgba(140, 130, 120, 0.10), transparent 42%),
+      linear-gradient(180deg, #f7f4ef 0%, #ece7df 100%);
+  }
+
+  /* Soft vignette + atmospheric grain (very subtle) */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.35) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/></svg>");
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+  }
+  html.light body::after {
+    background:
+      radial-gradient(ellipse at center, transparent 60%, rgba(40, 30, 20, 0.18) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before { transition: none; transform: scale(1.1); }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+  }
+
+  ::selection {
+    background: hsl(var(--accent) / 0.2);
+    color: hsl(var(--primary));
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--accent) / 0.4); }
+}
+
+@layer components {
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .card-airbnb {
+    @apply bg-card rounded-2xl overflow-hidden border border-border/60;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.5s var(--ease-luxury), box-shadow 0.5s var(--ease-luxury), border-color 0.5s var(--ease-luxury);
+  }
+  .card-airbnb:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: hsl(var(--accent) / 0.3);
+  }
+
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+  }
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid var(--glass-border);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300;
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    box-shadow: 0 8px 24px hsl(var(--accent) / 0.35);
+  }
+  .btn-primary:hover {
+    background: hsl(var(--accent-glow));
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px hsl(var(--accent) / 0.5);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    color: hsl(var(--foreground));
+  }
+  .btn-ghost:hover {
+    background: hsl(var(--background-elevated));
+    transform: translateY(-1px);
+    border-color: hsl(var(--accent) / 0.4);
+  }
+
+  .reveal-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s var(--ease-luxury), transform 0.9s var(--ease-luxury);
+  }
+  .reveal-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Lively per-item reveal: blur + scale + lift, cascaded by transition-delay */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(48px) scale(0.92) rotateX(8deg);
+    filter: blur(12px);
+    transform-origin: center bottom;
+    transition:
+      opacity 0.9s var(--ease-luxury),
+      transform 1s var(--ease-luxury),
+      filter 0.9s var(--ease-luxury);
+    will-change: opacity, transform, filter;
+  }
+  .reveal-stagger.in-view > * {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+    filter: blur(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-stagger > * {
+      transform: none;
+      filter: none;
+      transition: opacity 0.4s ease-out;
+    }
+  }
+
+  .story-link {
+    @apply relative inline-block;
+  }
+  .story-link::after {
+    content: '';
+    @apply absolute left-0 -bottom-0.5 h-0.5 w-full origin-bottom-right scale-x-0 transition-transform duration-300;
+    background: hsl(var(--accent));
+  }
+  .story-link:hover::after {
+    @apply scale-x-100 origin-bottom-left;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up { animation: fade-in-up 0.9s var(--ease-luxury) both; }
+  .animate-fade-in { animation: fade-in 1s var(--ease-luxury) both; }
+  .animate-scale-in { animation: scale-in 0.6s var(--ease-luxury) both; }
+  .animate-pulse-soft { animation: pulse-soft 2.5s ease-in-out infinite; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 hsl(142 70% 45% / 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 14px hsl(142 70% 45% / 0); }
+}
