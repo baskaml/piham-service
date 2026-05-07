@@ -25,13 +25,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Listener FIRST, then getSession (avoids race conditions)
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+      setLoading(true);
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
         // Defer DB call to avoid deadlock inside the callback
-        setTimeout(() => fetchRoles(s.user.id), 0);
+        setTimeout(() => {
+          fetchRoles(s.user.id).finally(() => setLoading(false));
+        }, 0);
       } else {
         setRoles([]);
+        setLoading(false);
       }
     });
 
@@ -46,7 +50,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchRoles = async (uid: string) => {
-    const { data } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+    const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+    if (error) {
+      console.error("Impossible de charger les rôles utilisateur", error);
+      setRoles([]);
+      return;
+    }
     setRoles((data?.map((r) => r.role as Role)) ?? []);
   };
 
