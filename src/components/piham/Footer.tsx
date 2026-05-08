@@ -27,7 +27,7 @@ export const Footer = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
         <div className="md:col-span-2">
           <Link to="/" className="flex items-center gap-3 w-fit">
-            <span className="h-10 w-10 rounded-xl bg-white flex items-center justify-center overflow-hidden p-1">
+            <span className="h-12 w-12 rounded-xl bg-white flex items-center justify-center overflow-hidden p-0.5 ring-1 ring-white/70">
               {logoUrl ? (
                 <img src={logoUrl} alt={brandName} className="h-full w-full object-contain" />
               ) : (

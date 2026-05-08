@@ -154,7 +154,7 @@ export const SectionEditor = ({
           <CardHeader><CardTitle className="text-sm">Images</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             {galleryKeys.length >= 2 && (
-              <BulkUploader galleryKeys={galleryKeys} uploadForKey={uploadForKey} />
+              <BulkUploader key={galleryKeys.join("|")} galleryKeys={galleryKeys} uploadForKey={uploadForKey} />
             )}
             {images.map(([k, v]) => (
               <div key={k} data-edit-key={k} className="space-y-2 p-1 -m-1 transition-shadow">
@@ -355,13 +355,21 @@ const BulkUploader = ({
     const total = items.length;
     // Snapshot order for slot mapping
     const snapshot = [...items];
+    const keySnapshot = [...galleryKeys];
+    let failed = 0;
     for (let i = 0; i < snapshot.length; i++) {
-      await uploadOne(snapshot[i], i);
+      updateItem(snapshot[i].id, { status: "uploading", error: undefined });
+      try {
+        await uploadForKey(keySnapshot[i], snapshot[i].file);
+        updateItem(snapshot[i].id, { status: "success" });
+      } catch (e: any) {
+        failed++;
+        updateItem(snapshot[i].id, { status: "error", error: e?.message ?? "Erreur" });
+      }
       done++;
       setProgress(Math.round((done / total) * 100));
     }
     setIsUploading(false);
-    const failed = items.filter((it) => it.status === "error").length;
     if (failed === 0) toast.success(`${total} image(s) mises à jour`);
     else toast.warning(`${total - failed}/${total} réussies — ${failed} échec(s)`);
   };

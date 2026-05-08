@@ -437,7 +437,7 @@ const Admin = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
                   {content["brand.logo_url"] ? (
-                    <img src={content["brand.logo_url"]} alt="logo" className="h-16 w-16 rounded-2xl object-cover border border-border" />
+                    <img src={content["brand.logo_url"]} alt="logo" className="h-20 w-20 rounded-2xl object-contain bg-white p-1 border border-border" />
                   ) : (
                     <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--accent))] to-[hsl(var(--gold))] flex items-center justify-center text-white font-display text-2xl">P</div>
                   )}
