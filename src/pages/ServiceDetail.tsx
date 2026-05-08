@@ -329,15 +329,15 @@ const ServiceDetail = () => {
             onClick={() => setLightbox(0)}
             className="col-span-4 md:col-span-2 row-span-2 relative group overflow-hidden"
           >
-            <img src={gallery[0]} alt={service.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src={gallery[0].src} alt={service.title} data-editable-key={gallery[0].key} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
           </button>
           {gallery.slice(1, 5).map((img, i) => (
             <button
-              key={i}
+              key={img.key}
               onClick={() => setLightbox(i + 1)}
               className="hidden md:block relative group overflow-hidden"
             >
-              <img src={img} alt={`${service.title} ${i + 2}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src={img.src} alt={`${service.title} ${i + 2}`} loading="lazy" data-editable-key={img.key} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               {i === 3 && (
                 <div className="absolute bottom-3 right-3 bg-white text-neutral-900 text-xs font-semibold px-3 py-2 rounded-lg shadow-card flex items-center gap-2">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
