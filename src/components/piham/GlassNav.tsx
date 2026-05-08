@@ -120,12 +120,12 @@ export const GlassNav = () => {
             <motion.span
               whileHover={{ rotate: [0, -8, 8, -4, 0] }}
               transition={{ duration: 0.6 }}
-              className="h-10 w-10 rounded-xl bg-gradient-to-br from-[hsl(var(--accent))] via-[hsl(330_90%_55%)] to-[hsl(var(--gold))] flex items-center justify-center shadow-[0_0_24px_hsl(var(--accent)/0.4)] overflow-hidden p-1"
+              className="h-12 w-12 rounded-xl bg-white flex items-center justify-center shadow-[0_0_24px_hsl(var(--accent)/0.35)] overflow-hidden p-0.5 ring-1 ring-white/70"
             >
               {logoUrl ? (
                 <img src={logoUrl} alt={brandName} className="h-full w-full object-contain" />
               ) : (
-                <span className="text-white font-display font-bold text-lg">{brandName.charAt(0) || "P"}</span>
+                <span className="text-primary font-display font-bold text-lg">{brandName.charAt(0) || "P"}</span>
               )}
             </motion.span>
             <div className="leading-tight">
