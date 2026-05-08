@@ -18,7 +18,7 @@ export const CONTENT_DEFAULTS: Record<string, string> = {
   // ---------- BRAND ----------
   "brand.name": "PIHAM Info Services",
   "brand.tagline": "BTP · Réseaux · Sûreté",
-  "brand.logo_url": "",
+  "brand.logo_url": "/logo.png",
   "brand.logo_alt": "Logo PIHAM Info Services",
 
   // ---------- HERO ----------
