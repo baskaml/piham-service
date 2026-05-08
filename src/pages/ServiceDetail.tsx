@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -29,8 +29,9 @@ const SLUG_TO_SECTION: Record<string, string> = {
 const ServiceDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const service = getServiceBySlug(slug);
-  const { content } = useSiteContent();
+  const { content, getImage } = useSiteContent();
   const { user } = useAuth();
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [saved, setSaved] = useState(false);
@@ -130,6 +131,75 @@ const ServiceDetail = () => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [slug]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("admin-preview") !== "1") return;
+    if (window.parent === window) return;
+    const editableSection = slug ? SLUG_TO_SECTION[slug] : null;
+    if (!editableSection) return;
+
+    const clearHover = () => {
+      document.querySelectorAll<HTMLElement>("[data-admin-hover]").forEach((el) => {
+        el.style.outline = "";
+        el.style.outlineOffset = "";
+        el.style.cursor = "";
+        el.removeAttribute("data-admin-hover");
+      });
+    };
+
+    const findEditable = (target: HTMLElement | null) => target?.closest<HTMLElement>("[data-editable-key]") ?? null;
+
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      e.preventDefault();
+      e.stopPropagation();
+      const editable = findEditable(target);
+      if (editable) {
+        const img = editable.tagName === "IMG"
+          ? (editable as HTMLImageElement)
+          : editable.querySelector<HTMLImageElement>("img");
+        window.parent.postMessage(
+          {
+            type: "lovable-element-click",
+            key: editable.getAttribute("data-editable-key"),
+            section: editableSection,
+            imageUrl: img ? (img.currentSrc || img.src) : undefined,
+            imageAlt: img?.alt,
+          },
+          "*",
+        );
+        return;
+      }
+      window.parent.postMessage({ type: "lovable-section-click", section: editableSection }, "*");
+    };
+
+    const onOver = (e: MouseEvent) => {
+      clearHover();
+      const editable = findEditable(e.target as HTMLElement) ?? document.querySelector<HTMLElement>("[data-service-detail]");
+      if (!editable) return;
+      editable.style.outline = "2px solid hsl(var(--accent))";
+      editable.style.outlineOffset = editable.hasAttribute("data-editable-key") ? "2px" : "-4px";
+      editable.style.cursor = "pointer";
+      editable.setAttribute("data-admin-hover", "1");
+    };
+
+    const onMessage = (e: MessageEvent) => {
+      if (e.data?.type === "lovable-scroll") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+
+    document.addEventListener("click", onClick, true);
+    document.addEventListener("mouseover", onOver);
+    window.addEventListener("message", onMessage);
+    return () => {
+      clearHover();
+      document.removeEventListener("click", onClick, true);
+      document.removeEventListener("mouseover", onOver);
+      window.removeEventListener("message", onMessage);
+    };
+  }, [location.search, slug]);
+
   if (!service) {
     return (
       <main className="min-h-screen bg-background text-foreground flex items-center justify-center">
@@ -144,15 +214,17 @@ const ServiceDetail = () => {
   }
 
   const sectionKey = slug ? SLUG_TO_SECTION[slug] : null;
-  const gallery: string[] = sectionKey
-    ? Array.from({ length: 5 }, (_, i) =>
-        content[`${sectionKey}.gallery${i + 1}_url`] || service.gallery[i],
-      )
-    : service.gallery;
+  const gallery = sectionKey
+    ? Array.from({ length: 5 }, (_, i) => {
+        const key = `${sectionKey}.gallery${i + 1}_url`;
+        const value = (content[key] ?? "").trim();
+        return { key, src: value ? getImage(key) : service.gallery[i] };
+      })
+    : service.gallery.map((src, i) => ({ key: `service.gallery${i + 1}_url`, src }));
 
   const galleryItems: MediaItem[] = gallery.map((src, i) => ({
     type: "image",
-    src,
+    src: src.src,
     title: `${service.title} — image ${i + 1}`,
     tag: service.tag,
   }));
