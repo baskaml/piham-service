@@ -230,7 +230,7 @@ const ServiceDetail = () => {
   }));
 
   return (
-    <main className="relative bg-background text-foreground min-h-screen overflow-x-hidden">
+    <main className="relative bg-background text-foreground min-h-screen overflow-x-hidden" data-service-detail={sectionKey ?? undefined}>
       <GlassNav />
 
       <div className="container pt-28 md:pt-32 pb-20">
