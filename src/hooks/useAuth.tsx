@@ -23,25 +23,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let currentUserId: string | null = null;
+
     // Listener FIRST, then getSession (avoids race conditions)
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setLoading(true);
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) {
-        // Defer DB call to avoid deadlock inside the callback
-        setTimeout(() => {
-          fetchRoles(s.user.id).finally(() => setLoading(false));
-        }, 0);
-      } else {
-        setRoles([]);
-        setLoading(false);
+      const newUid = s?.user?.id ?? null;
+
+      // Only refetch roles when the user identity actually changes,
+      // not on TOKEN_REFRESHED / INITIAL_SESSION ticks (which would cause
+      // a constant loading flicker in the admin panel).
+      if (newUid !== currentUserId) {
+        currentUserId = newUid;
+        if (newUid) {
+          setLoading(true);
+          setTimeout(() => {
+            fetchRoles(newUid).finally(() => setLoading(false));
+          }, 0);
+        } else {
+          setRoles([]);
+          setLoading(false);
+        }
       }
     });
 
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       setUser(s?.user ?? null);
+      currentUserId = s?.user?.id ?? null;
       if (s?.user) fetchRoles(s.user.id).finally(() => setLoading(false));
       else setLoading(false);
     });
