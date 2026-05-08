@@ -5,13 +5,20 @@ import { useSiteContent } from "@/hooks/useSiteContent";
 import { CinematicGrid, CinematicCard } from "./CinematicGrid";
 
 export const Services = () => {
-  const { content, getImage } = useSiteContent();
+  const { content, overrides, getImage } = useSiteContent();
   const keyMap: Record<string, string> = {
     btp: "services.image_btp_url",
     "cablage-reseau": "services.image_cablage_url",
     cctv: "services.image_cctv_url",
     "detection-incendie": "services.image_incendie_url",
     fournitures: "services.image_fournitures_url",
+  };
+  const galleryCoverMap: Record<string, string> = {
+    btp: "service_btp.gallery1_url",
+    "cablage-reseau": "service_cablage.gallery1_url",
+    cctv: "service_cctv.gallery1_url",
+    "detection-incendie": "service_incendie.gallery1_url",
+    fournitures: "service_fournitures.gallery1_url",
   };
   return (
     <section id="services" className="relative py-24 md:py-32 bg-background">
@@ -30,8 +37,14 @@ export const Services = () => {
         <CinematicGrid className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {services.map((s, i) => {
             const k = keyMap[s.slug];
-            const override = k ? (content[k] ?? "").trim() : "";
-            const image = override ? getImage(k) : s.image;
+            const galleryCoverKey = galleryCoverMap[s.slug];
+            const serviceOverride = k ? (overrides[k] ?? "").trim() : "";
+            const galleryOverride = galleryCoverKey ? (overrides[galleryCoverKey] ?? "").trim() : "";
+            const image = serviceOverride
+              ? getImage(k)
+              : galleryOverride
+                ? getImage(galleryCoverKey)
+                : s.image;
             return <ServiceCard key={s.title} service={{ ...s, image }} index={i} editKey={k} />;
           })}
         </CinematicGrid>
