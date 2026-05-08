@@ -62,8 +62,17 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useTheme = () => {
+export const useTheme = (): ThemeContextValue => {
   const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
-  return ctx;
+  if (ctx) return ctx;
+  // Fallback (e.g. during HMR or when used outside provider) — no-op theme controls
+  return {
+    theme: typeof document !== "undefined" && document.documentElement.classList.contains("light") ? "light" : "dark",
+    toggle: () => {
+      if (typeof document !== "undefined") document.documentElement.classList.toggle("light");
+    },
+    setTheme: (t) => {
+      if (typeof document !== "undefined") document.documentElement.classList.toggle("light", t === "light");
+    },
+  };
 };
